@@ -1,4 +1,4 @@
-# Installation-de-Qemu-et-Hexagon_DSP# 🖥️ QEMU — Guide d'installation complet
+# 🖥️ QEMU — Guide d'installation complet
 
 <div align="center">
 
@@ -33,6 +33,10 @@
   - [Exemples courants](#exemples-courants)
 - [Gestion avec libvirt / virt-manager](#-gestion-avec-libvirt--virt-manager)
 - [Configuration réseau](#-configuration-réseau)
+- [Téléchargement du Hexagon SDK](#-téléchargement-du-hexagon-sdk)
+  - [Linux / macOS](#linux--macos)
+  - [Windows](#windows)
+  - [Script automatisé (toutes plateformes)](#script-automatisé-toutes-plateformes)
 - [Dépannage](#-dépannage)
 - [Ressources utiles](#-ressources-utiles)
 - [Licence](#-licence)
@@ -608,6 +612,136 @@ newgrp kvm
 # ou forcer le démarrage depuis le CD
 -boot d
 ```
+
+---
+
+## 📦 Téléchargement du Hexagon SDK
+
+Le **Hexagon SDK** est disponible directement depuis les **GitHub Releases** de ce dépôt. Vous pouvez le télécharger et l'installer entièrement depuis votre terminal, sans passer par un navigateur.
+
+> **Remplacez** `VX.X.X` par la version souhaitée (ex : `V5.5.0`).  
+> **Remplacez** `VOTRE-USERNAME` et `VOTRE-DEPOT` par vos informations GitHub.
+
+---
+
+### Linux / macOS
+
+#### Avec `wget` (recommandé)
+
+```bash
+# Télécharger la dernière version
+wget https://github.com/VOTRE-USERNAME/VOTRE-DEPOT/releases/latest/download/hexagon-sdk.zip
+
+# Ou une version spécifique
+wget https://github.com/VOTRE-USERNAME/VOTRE-DEPOT/releases/download/VX.X.X/hexagon-sdk.zip
+```
+
+#### Avec `curl`
+
+```bash
+# Télécharger la dernière version
+curl -L -O https://github.com/VOTRE-USERNAME/VOTRE-DEPOT/releases/latest/download/hexagon-sdk.zip
+
+# Ou une version spécifique
+curl -L -O https://github.com/VOTRE-USERNAME/VOTRE-DEPOT/releases/download/VX.X.X/hexagon-sdk.zip
+```
+
+#### Extraire et installer
+
+```bash
+# Installer unzip si nécessaire
+sudo apt install unzip -y        # Debian/Ubuntu
+sudo dnf install unzip -y        # Fedora
+sudo pacman -S unzip             # Arch Linux
+
+# Extraire l'archive
+unzip hexagon-sdk.zip -d hexagon-sdk/
+
+# Se placer dans le répertoire
+cd hexagon-sdk/
+
+# Rendre les scripts exécutables (si présents)
+chmod +x *.sh
+
+# Lancer le script d'installation
+./setup.sh
+```
+
+---
+
+### Windows
+
+#### Avec PowerShell
+
+```powershell
+# Télécharger la dernière version
+Invoke-WebRequest `
+  -Uri "https://github.com/VOTRE-USERNAME/VOTRE-DEPOT/releases/latest/download/hexagon-sdk.zip" `
+  -OutFile "hexagon-sdk.zip"
+
+# Ou une version spécifique
+Invoke-WebRequest `
+  -Uri "https://github.com/VOTRE-USERNAME/VOTRE-DEPOT/releases/download/VX.X.X/hexagon-sdk.zip" `
+  -OutFile "hexagon-sdk.zip"
+
+# Extraire l'archive
+Expand-Archive -Path "hexagon-sdk.zip" -DestinationPath "hexagon-sdk" -Force
+
+# Se placer dans le répertoire
+Set-Location hexagon-sdk
+```
+
+#### Avec `curl` natif (Windows 10/11)
+
+```powershell
+curl.exe -L -O "https://github.com/VOTRE-USERNAME/VOTRE-DEPOT/releases/latest/download/hexagon-sdk.zip"
+
+# Extraire
+tar -xf hexagon-sdk.zip
+```
+
+---
+
+### Script automatisé (toutes plateformes)
+
+Avec la **GitHub CLI** (`gh`) — méthode la plus propre :
+
+```bash
+# Installer gh (Debian/Ubuntu)
+sudo apt install gh -y
+
+# S'authentifier
+gh auth login
+
+# Télécharger l'asset de la dernière release
+gh release download --repo VOTRE-USERNAME/VOTRE-DEPOT --pattern "hexagon-sdk.zip"
+
+# Télécharger une version spécifique
+gh release download VX.X.X --repo VOTRE-USERNAME/VOTRE-DEPOT --pattern "hexagon-sdk.zip"
+
+# Extraire
+unzip hexagon-sdk.zip -d hexagon-sdk/
+```
+
+---
+
+### Vérifier l'intégrité du fichier (recommandé)
+
+Si un fichier de checksum est publié avec la release (`hexagon-sdk.zip.sha256`) :
+
+```bash
+# Télécharger le checksum
+wget https://github.com/VOTRE-USERNAME/VOTRE-DEPOT/releases/latest/download/hexagon-sdk.zip.sha256
+
+# Vérifier
+sha256sum -c hexagon-sdk.zip.sha256
+# Résultat attendu : hexagon-sdk.zip: OK
+```
+
+> 💡 Pour générer ce fichier lors de la publication :
+> ```bash
+> sha256sum hexagon-sdk.zip > hexagon-sdk.zip.sha256
+> ```
 
 ---
 
